@@ -32,8 +32,17 @@ public class GaussJordan {
 
 			}
 		}
+	}
+	
+	
+	public void produceSolution() {
 		
-
+		if (!this.validSolution()) {
+			System.out.println("Invalid Solution!");
+		}
+		else 
+			return;
+		
 	}
 
 	/**
@@ -75,16 +84,18 @@ public class GaussJordan {
 				this.matrix[i] = temp;
 			}
 			
-			// TODO: make pivot entry = 1
+			
 			matrix[r] = scaleRowWithPivot(lead, matrix[r]);
 			
 			// eliminate other entries in same column by subtracting matrix[r]*number from its respective row
 			for (int j = 0; j < rowCount; j++) {
 				
 				// do not eliminate row r itself
-				if (j != r) {
-					matrix[i] = eliminateEntry(matrix[i][lead], matrix[r], matrix[i]);
+				if (j != r && matrix[j][lead] != 0.0) {
+					matrix[j] = eliminateEntry(matrix[j][lead], matrix[r], matrix[j]);
 				}
+				
+				System.out.println(this);
 			}
 			
 			// increase column
@@ -106,6 +117,7 @@ public class GaussJordan {
 		
 		for (int i = pivotIndex; i < row.length; i++) {
 			row[i] = row[i]/pivotValue;
+			System.out.println("[scaleRowWithPivot] Scaled value = " + row[i]);
 		}
 		
 		return row;
@@ -119,11 +131,15 @@ public class GaussJordan {
 	 * @return
 	 */
 	private double[] eliminateEntry(double coefficient, double[] pivotColumn, double[] elimColumn) {
+		System.out.println("[eliminateEntry]: coefficient = " + coefficient);
+		System.out.println("[eliminateEntry]: pivotColumn = " + pivotColumn);
+		System.out.println("[eliminateEntry]: elimColumn = " + elimColumn);
 		
 		double[] result = new double[pivotColumn.length];
 		
 		for (int i = 0; i < result.length; i++) {
 			result[i] = elimColumn[i] - coefficient*pivotColumn[i];
+			System.out.println("[eliminateEntry]: Entry = " + result[i]);
 		}
 		
 		return result;
@@ -138,7 +154,6 @@ public class GaussJordan {
 				return false;
 			i++;
 		}
-		
 		return true;
 		
 	}
@@ -165,9 +180,7 @@ public class GaussJordan {
 	}
 
 
-	/**
-	 * Turns matrix into string.
-	 */
+	@Override
 	public String toString() {
 		String s = "";
 		for (int i=0; i<this.matrix.length; i++) {
