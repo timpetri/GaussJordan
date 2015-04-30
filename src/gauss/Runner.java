@@ -26,9 +26,10 @@ public class Runner {
 			System.out.println(gj);
 			System.out.println(gj.produceSolutionString());
 			
-			// JOptionPane.showMessageDialog(null, gj.toString());
+			JOptionPane.showMessageDialog(null, gj.toString());
+			JOptionPane.showMessageDialog(null, gj.produceSolutionString());
 			
-			//i = JOptionPane.showConfirmDialog(null, "Would you like to enter another matrix?", "Quit? Y/N", JOptionPane.YES_NO_OPTION);
+			i = JOptionPane.showConfirmDialog(null, "Would you like to enter another matrix?", "Quit? Y/N", JOptionPane.YES_NO_OPTION);
 		}
 		
 		System.exit(0);

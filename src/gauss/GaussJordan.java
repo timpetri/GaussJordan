@@ -1,7 +1,4 @@
-
-
 package gauss;
-
 
 public class GaussJordan {
 
@@ -9,11 +6,9 @@ public class GaussJordan {
 	private double[][] matrix;
 
 
-
 	public GaussJordan(String s) {
 		this.inputString = s.trim();
 	}
-
 
 	/**
 	 * Parses the input string to populate other attributes of class.
@@ -39,17 +34,89 @@ public class GaussJordan {
 		String solution = "";
 		
 		if (!this.validSolution()) {
-			solution = "There is no solution.";
+			solution = "There is no solution.\n";
 		}
 		else if (this.hasFreeVariables()) {
-			solution = "There are infinte solutions";
+			solution = "There are an infinite amount of solutions:\n";
+			solution += produceInifinteSolution();
 		}
 		else {
-			solution = "There is a unique solution";
+			solution = "There is a unique solution:\n";
+			solution += produceUniqueSolution();
 		}
 		
 		return solution;		
 	}
+
+	/**
+	 * The less-of-a-fuckery that is producing a unique solution string.
+	 * @return
+	 */
+	private String produceUniqueSolution() {
+		String solution = "";
+		int numCol = matrix[0].length;
+		
+		for (int row = 0, col = 0; col < (this.matrix[0].length - 1) && row < (this.matrix.length); row++, col++) {
+			solution += "x" + (col+1) + " = " + matrix[row][numCol-1] + "\n";
+		}
+		
+		return solution;
+	}
+
+
+	/**
+	 * The fuckery that is producing a non-unique solution string.
+	 * @return
+	 */
+	private String produceInifinteSolution() {
+		
+		String solution = "";
+		int numCol = matrix[0].length;
+		
+		int row = 0, col = 0;
+		
+		// traverse down diagonal add solution for each variable (either free or as equation)
+		while ( col < (this.matrix[0].length - 1) && row < (this.matrix.length)) {
+			System.out.println(solution);
+			if (matrix[row][col] == 0.0 || matrix[row][col] == -0.0) {
+				solution += "x" + (col+1) + " is free.\n";
+				col++;
+			}
+			else {
+				solution += "x" + (col+1) + " = " + matrix[row][numCol-1] + " ";
+				for (int col2 = numCol-2; col2 > col; col2--) {
+					if (Math.abs(matrix[row][col2]) != 0.0) {
+						solution += doubleToOppositeString(matrix[row][col2]) + "x"+ (col2+1);
+					}
+				}
+				solution += "\n";
+				row++;
+				col++;
+			}
+		}
+		
+		// add final free variables
+		while (col < numCol-1) {
+			solution += "x" + (col+1) + " is free.\n";
+			col++;
+		}
+		return solution;
+	}
+
+
+	/**
+	 * @param d
+	 * @return
+	 */
+	private String doubleToOppositeString(double d) {
+		if (d == 0.0 || d == -0.0)
+			return "";
+		else if (d < 0) 
+			return "+ " + Math.abs(d) + "*";
+		else 
+			return "- " + d + "*";
+	}
+
 
 	/**
 	 * @return
