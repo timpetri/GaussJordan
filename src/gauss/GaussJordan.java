@@ -35,15 +35,41 @@ public class GaussJordan {
 	}
 	
 	
-	public void produceSolution() {
+	public String produceSolutionString() {
+		String solution = "";
 		
 		if (!this.validSolution()) {
-			System.out.println("Invalid Solution!");
+			solution = "There is no solution.";
 		}
-		else 
-			return;
+		else if (this.hasFreeVariables()) {
+			solution = "There are infinte solutions";
+		}
+		else {
+			solution = "There is a unique solution";
+		}
 		
+		return solution;		
 	}
+
+	/**
+	 * @return
+	 */
+	private boolean hasFreeVariables() {
+		
+		// easy first check
+		int numRow = this.matrix.length;
+		int numCol = this.matrix[0].length;
+		if ((numCol - numRow) > 1)
+			return true;
+		
+			for (int row = 0, col = 0; col < (this.matrix[0].length - 1); row++, col++) {
+				if (this.matrix[row][col] == 0.0)
+					return true;
+			}
+		
+		return false;
+	}
+
 
 	/**
 	 * Reduces the matrix to Reduced Row Echelon Form.
@@ -170,7 +196,7 @@ public class GaussJordan {
 		}
 		
 		for (int i=0; i<row.length-1; i++) {
-			if (row[i] != 0.0) {
+			if (row[i] != 0.0 || row[i] != -0.0) {
 				System.out.println("Row ok!");
 				return true;
 			}
